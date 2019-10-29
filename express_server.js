@@ -47,14 +47,35 @@ app.post("/urls", (req, res) => {
         if (error) {
           res.send(`NOOOOOO!! such A Link check your URL`);
           return }
-         
           res.redirect(`urls/${shortURL}`)          
         })
-  });
+})
      app.get("/urls" , (req, res) => {
          let tempplateVars = { urls: urlDatabase }
       res.render("urls_index", tempplateVars)
      });
+     app.post("/urls/:id/delete", (req, res) => {
+      let shortURL = req.params.id
+      delete urlDatabase[shortURL]
+      res.redirect("/urls")
+     });
+
+     app.post("/urls/:id/update", (req, res) => {
+      let shortURL = req.params.id
+      const longURL = req.body.longURL
+      if (longURL.startsWith('https://')) {
+        urlDatabase[shortURL] = longURL } else {
+            urlDatabase[shortURL] = `https://${longURL}`
+        }
+    
+    request(urlDatabase[shortURL], (error, response, body) => {                   //response here to get back the body size and to use it on the bytes
+        if (error) {
+          res.send(`NOOOOOO!! such A Link check your URL`);
+          return }
+      res.redirect(`/urls/${shortURL}`)
+     });
+    })
+
 
      app.get("/urls/new", (req, res) => {
         res.render("urls_new");
