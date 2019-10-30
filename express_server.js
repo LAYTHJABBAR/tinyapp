@@ -21,6 +21,20 @@ const urlDatabase = {
   "b2xVn2": "http://www.lighthouselabs.ca",
   "9sm5xK": "http://www.google.com"
 };
+
+const users = { 
+  "userRandomID": {
+    id: "userRandomID", 
+    email: "user@example.com", 
+    password: "purple-monkey-dinosaur"
+  },
+ "user2RandomID": {
+    id: "user2RandomID", 
+    email: "user2@example.com", 
+    password: "dishwasher-funk"
+  }
+}
+
 // app.get("/", (req, res) => {
 //   res.send("Hello layth!");
 // });
@@ -111,6 +125,38 @@ app.get("/urls/:shortURL", (req, res) => {
 app.get("/u/:shortURL", (req, res) => {
   res.redirect(urlDatabase[req.params.shortURL]);
 });
+app.post('/register', (req, res) => {
+  const id = generateRandomString();
+  const user_id = generateRandomString()
+  let email = req.body.email;
+  let password = req.body.password;
+  if (!email || !password) {
+    res.status(400);
+    res.send("please provide email and password");
+    return;
+  }
+  for (let check in users) {
+    if (email = users[check].email) {
+      res.status(400)
+      res.send(" email exists, plase use another email.");
+      return;
+    } else {
+    }
+  }
+  users[user_id] = { id, email, password };
+  res.cookie('password', req.body.password);
+  res.cookie('email', req.body.email);
+  //console.log(newUser);
+  res.redirect('/urls')
+ })
+ //registers a new user
+ app.get('/register', (req, res) => {
+  let templateVars = {
+    username: req.cookies["username"]
+  };
+  return res.render('urls_register', templateVars);
+ });
+
 app.listen(PORT, () => {
   console.log(`Example app listening on port ${PORT}!`);
 });
