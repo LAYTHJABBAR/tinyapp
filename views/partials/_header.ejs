@@ -9,7 +9,23 @@
           <a class="nav-item nav-link" href="/urls">My URLs</a>
           <a class="nav-item nav-link" href="/urls/new">Create New URL</a>
         </div>
-      </div>
+     
+      <% if(!username){ %>
+      <div> 
+        <form class="form-inline" action="/urls/login" method="POST"> 
+            <input class="form-control" type="text" name="username" placeholder="UserName" style="width: 300px; justify-content: right; margin: 1em">
+            <button type="submit" class="btn btn-primary" style="justify-content: right;">Login</button>
+          </form>
+        </div>
+      <% } else { %>
+         <%= username %>
+        <div>
+            <form class="form-inline" action="/urls/logout" method="POST">
+                <label for="longURL"></label>
+                <button type="submit" class="btn btn-primary" style="justify-content: right;" >Logout</button>
+              </form>
+            </div>
+     <% } %>
     </nav>
   </header>
   
