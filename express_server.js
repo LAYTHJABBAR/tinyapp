@@ -180,7 +180,7 @@ app.post('/register', (req, res) => {
   //res.cookie('email', req.body.email);
    
   users[id] = { id, email, password };
-  console.log(users);
+   
   res.redirect('/urls')
  })
  //registers a new user
