@@ -134,7 +134,7 @@ app.post('/login', (req, res) => { // Checking if the inofrmation been entered c
 });
 app.get('/login', (req, res) => {
   let templateVars = {
-      user_id: req.cookies["user_id"]
+      user: req.cookies["id"]
   };
   return res.render('urls_login', templateVars);
 });
