@@ -24,10 +24,15 @@ function generateRandomString() {
 }
 
 app.use(bodyParser.urlencoded({ extended: true }));
+// const urlDatabase = {
+//   "b2xVn2": "http://www.lighthouselabs.ca",
+//   "9sm5xK": "http://www.google.com"
+// };
 const urlDatabase = {
-  "b2xVn2": "http://www.lighthouselabs.ca",
-  "9sm5xK": "http://www.google.com"
+  b6UTxQ: { longURL: "https://www.tsn.ca", userID: "aJ48lW" },
+  i3BoGr: { longURL: "https://www.google.ca", userID: "aJ48lW" }
 };
+
 
 const users = { 
   "userRandomID": {
@@ -63,11 +68,11 @@ app.post("/urls", (req, res) => {
   const shortURL = generateRandomString();
   const longURL = req.body.longURL;
   if (longURL.startsWith('https://')) {
-    urlDatabase[shortURL] = longURL;
+    urlDatabase[shortURL] = { longURL: longURL, userID: req.cookies['id']};
   } else {
-    urlDatabase[shortURL] = `https://${longURL}`;
+    urlDatabase[shortURL] = { longURL: `https://${longURL}`, userID: req.cookies['id']};
   }
-  request(urlDatabase[shortURL], (error) => {                   //response here to get back the body size and to use it on the bytes
+  request(urlDatabase[shortURL].longURL, (error) => {                   //response here to get back the body size and to use it on the bytes
     if (error) {
       res.send(`NOOOOOO!! such A Link check your URL`);
       return;
