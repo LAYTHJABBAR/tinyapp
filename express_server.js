@@ -1,3 +1,4 @@
+const bcrypt = require('bcrypt');
 const express = require("express");
 const request = require('request');
 const app = express();
@@ -129,12 +130,13 @@ app.get("/urls/new", (req, res) => {
 });
 
 app.post('/login', (req, res) => { // Checking if the inofrmation been entered corrctly or no.
+
   const { email, password } = req.body;
   let isPassworg = false;
   for (const userId in users) {
       const user = users[userId];
       if (isEmailExist(users, email)) {
-          if (user.password === password) {
+          if (bcrypt.compareSync(password, users[userId].password)) {
               isPassworg = true;
               res.cookie('id', user.id);
               res.redirect('/urls');
@@ -149,7 +151,7 @@ app.post('/login', (req, res) => { // Checking if the inofrmation been entered c
 });
 app.get('/login', (req, res) => {
   let templateVars = {
-      user: req.cookies["id"]
+      user: users[req.cookies["id"]]
   };
   return res.render('urls_login', templateVars);
 });
@@ -177,6 +179,7 @@ app.post('/register', (req, res) => {
   const id = generateRandomString();
   let email = req.body.email;
   let password = req.body.password;
+  let hashedPassword = bcrypt.hashSync(password, 10);
   if (!email || !password) {
     res.status(400);
     res.send("please provide email and password");
@@ -190,11 +193,11 @@ app.post('/register', (req, res) => {
     }
   }
   res.cookie('id', id);
-  res.cookie('password', req.body.password);
+  res.cookie('password', hashedPassword);
   res.cookie('email', req.body.email);
   //res.cookie('email', req.body.email);
-   
-  users[id] = { id, email, password };
+ 
+  users[id] = { id: id, email: req.body.email, password: hashedPassword };
    
   res.redirect('/urls')
  })
