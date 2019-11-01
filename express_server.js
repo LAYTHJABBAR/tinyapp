@@ -67,7 +67,7 @@ const users = {
 app.post("/urls", (req, res) => {
   const shortURL = generateRandomString();
   const longURL = req.body.longURL;
-  if (longURL.startsWith('https://')) {
+  if ( longURL.startsWith('https://')) {
     urlDatabase[shortURL] = { longURL: longURL, userID: req.cookies['id']};
   } else {
     urlDatabase[shortURL] = { longURL: `https://${longURL}`, userID: req.cookies['id']};
@@ -80,11 +80,22 @@ app.post("/urls", (req, res) => {
     res.redirect(`urls/${shortURL}`);
   });
 });
+function urlsOfUser(id, urlDatabase) {
+  let urlOfUserNew = {};
+  if(id) {
+    for (const key in urlDatabase) {
+        if (urlDatabase[key].userID === id) {
+          urlOfUserNew = Object.assign(urlOfUserNew, {[key]: urlDatabase[key]});
+        }
+      }
+    }
+  return urlOfUserNew;
+ }
 app.get("/urls", (req, res) => {
   let templateVars = {
-    urls: urlDatabase,
+    urls: urlsOfUser(req.cookies['id'], urlDatabase),
     user: users[req.cookies['id']]
-  };
+};
   res.render("urls_index", templateVars);
 });
 
@@ -98,17 +109,16 @@ app.post("/urls/:id/update", (req, res) => {
   let shortURL = req.params.id;
   const longURL = req.body.longURL;
   if (longURL.startsWith('https://')) {
-    urlDatabase[shortURL] = longURL;
+    urlDatabase[shortURL] = { longURL: longURL, userID: req.cookies['id']};
   } else {
-    urlDatabase[shortURL] = `https://${longURL}`;
+    urlDatabase[shortURL] = { longURL: `https://${longURL}`, userID: req.cookies['id']};
   }
-
-  request(urlDatabase[shortURL], (error) => {                   //response here to get back the body size and to use it on the bytes
+  request(urlDatabase[shortURL].longURL, (error) => {                   //response here to get back the body size and to use it on the bytes
     if (error) {
       res.send(`NOOOOOO!! such A Link check your URL`);
       return;
     }
-    res.redirect(`/urls/${shortURL}`);
+    res.redirect(`/urls`);
   });
 });
 app.get("/urls/new", (req, res) => {
@@ -153,7 +163,7 @@ app.post("/urls/logout", (req, res) => {
 app.get("/urls/:shortURL", (req, res) => {
   let templateVars = {
     shortURL: req.params.shortURL,
-    longURL: urlDatabase[req.params.shortURL],
+    longURL: urlDatabase[req.params.shortURL].longURL,
     user: users[req.cookies['id']]
   };
   res.render("urls_show", templateVars);
