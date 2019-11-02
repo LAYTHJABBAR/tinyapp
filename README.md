@@ -7,7 +7,7 @@ TinyApp is a full stack web application built with Node and Express that allows 
 -  shortened URL links .
 -  checking the link if it's a correct link before shortened it.
 - 
- !["Screenshot of URLs page"](https://raw.githubusercontent.com/LAYTHJABBAR/tinyapp/master/docs/urls-page.png)
+ !["Screenshot of URLs page"](https://raw.githubusercontent.com/LAYTHJABBAR/tinyapp/master/docs/url_editing%20_page.png)
  !["Screenshot of URLs page"](https://raw.githubusercontent.com/LAYTHJABBAR/tinyapp/master/docs/urls-page.png)
  !["Screenshot of Cookies page"](https://raw.githubusercontent.com/LAYTHJABBAR/tinyapp/master/docs/cookies.png)
 
