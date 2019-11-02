@@ -1,17 +1,12 @@
 const bcrypt = require('bcrypt');
+const getUserByEmail = require ('./helper')
 const express = require("express");
 const request = require('request');
 const app = express();
 const cookieSession = require('cookie-session');
 const PORT = 8080;
 app.set("view engine", "ejs");
-const getUserByEmail = (database, email) => {
-  for (const key in database) {
-      if (Object.values(database[key]).indexOf(email) > -1) {
-          return true;
-      }
-  }
-};
+
 app.use(cookieSession({
   name: 'session',
   keys: ['anan']
