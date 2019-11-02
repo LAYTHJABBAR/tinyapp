@@ -170,7 +170,12 @@ app.get("/urls/:shortURL", (req, res) => {
   res.render("urls_show", templateVars);
 });
 app.get("/u/:shortURL", (req, res) => {
-  res.redirect(urlDatabase[req.params.shortURL]);
+  const url = urlDatabase[req.params.shortURL];
+  if (url && url.longURL) {
+    res.redirect(url.longURL);
+  } else {
+    res.status(400).send("Stop")
+  }
 });
 
 //register
