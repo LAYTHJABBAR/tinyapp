@@ -21,7 +21,14 @@ function generateRandomString() {
   }
   return result;
 }
-
+app.set("view engine", "ejs");
+const isEmailExist = (object, email) => {
+  for (const key in object) {
+    if (Object.values(object[key]).indexOf(email) > -1) {
+      return true;
+    }
+  }
+};
 
 
 app.use(bodyParser.urlencoded({ extended: true }));
