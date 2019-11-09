@@ -16,4 +16,14 @@ function urlsOfUser(id, urlDatabase) {
   }
   return urlOfUserNew;
 }
-module.exports = { getUserByEmail, urlsOfUser };
+function generateRandomString() {
+  let result = '';
+  let characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
+  let charactersLength = characters.length;
+  for (let i = 0; i < 6; i++) {
+    result += characters.charAt(Math.floor(Math.random() * charactersLength));
+  }
+  return result;
+}
+
+module.exports = { getUserByEmail, urlsOfUser , generateRandomString};
