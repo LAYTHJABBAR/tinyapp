@@ -1,8 +1,9 @@
+//external requirments
 const bcrypt = require("bcrypt");
 const {
-  getUserByEmail,
   urlsOfUser,
-  generateRandomString
+  generateRandomString,
+  isEmailExist
 } = require("./helper");
 const express = require("express");
 const request = require("request");
@@ -20,21 +21,14 @@ app.use(
 const bodyParser = require("body-parser");
 
 app.set("view engine", "ejs");
-const isEmailExist = (object, email) => {
-  for (const key in object) {
-    if (Object.values(object[key]).indexOf(email) > -1) {
-      return true;
-    }
-  }
-};
 
 app.use(bodyParser.urlencoded({ extended: true }));
-
+// urls data for long and short url
 const urlDatabase = {
   b6UTxQ: { longURL: "https://www.tsn.ca", userID: "aJ48lW" },
   i3BoGr: { longURL: "https://www.google.ca", userID: "aJ48lW" }
 };
-
+//user data information
 const users = {
   userRandomID: {
     id: "userRandomID",
@@ -47,7 +41,7 @@ const users = {
     password: "dishwasher-funk"
   }
 };
-
+// code for get / page if user logged in return it to /urls else return to login page
 app.get("/", (req, res) => {
   const userId = req.session.id;
   if (!userId) {
@@ -56,7 +50,7 @@ app.get("/", (req, res) => {
     res.redirect("/urls");
   }
 });
-
+// urls page code this code to show the url index page
 app.post("/urls", (req, res) => {
   const userId = req.session.id;
   if (!userId) {
@@ -88,6 +82,7 @@ app.get("/urls", (req, res) => {
     res.render("urls_index", templateVars);
   }
 });
+// urls/:id/delete code this code to delete the generated tiny url from data base
 app.post("/urls/:id/delete", (req, res) => {
   const userId = req.session.id;
   if (!userId) {
@@ -99,7 +94,7 @@ app.post("/urls/:id/delete", (req, res) => {
     res.redirect("/urls");
   }
 });
-
+//this code to update tiny url
 app.post("/urls/:id/update", (req, res) => {
   const userId = req.session.id;
   if (!userId) {
@@ -115,7 +110,6 @@ app.post("/urls/:id/update", (req, res) => {
         userID: req.session["id"]
       };
     }
-
     request(urlDatabase[shortURL].longURL, error => {
       if (error) {
         res.send(`NO such A Link check your URL`);
@@ -125,7 +119,7 @@ app.post("/urls/:id/update", (req, res) => {
     });
   }
 });
-
+//url/new page code this code to creat new tiny url
 app.get("/urls/new", (req, res) => {
   const userId = req.session.id;
   if (!userId) {
@@ -137,8 +131,7 @@ app.get("/urls/new", (req, res) => {
     res.render("urls_new", templateVars);
   }
 });
-
-app.post("/login", (req, res) => {
+// login code this code to log the use to the app and contain encryption code to save password
   const { email, password } = req.body;
   let isPassworg = false;
   for (const userId in users) {
@@ -163,6 +156,7 @@ app.get("/login", (req, res) => {
   };
   return res.render("login", templateVars);
 });
+// this code to log out the user and tedirect it to the login page
 app.post("/urls/logout", (req, res) => {
   req.session.id = null;
   res.redirect("/urls");
@@ -189,7 +183,7 @@ app.get("/u/:shortURL", (req, res) => {
     res.status(400).send("ther is no such tiny URL");
   }
 });
-
+// this code for registaration and to encrypt the password 
 app.post("/register", (req, res) => {
   const id = generateRandomString();
   let email = req.body.email;
@@ -219,6 +213,7 @@ app.get("/register", (req, res) => {
   return res.render("registration", templateVars);
 });
 
+// this code to assign por listiong code
 app.listen(PORT, () => {
   console.log(`Example app listening on port ${PORT}!`);
 });
