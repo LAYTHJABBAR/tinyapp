@@ -2,7 +2,7 @@ const bcrypt = require("bcrypt");
 const {
   getUserByEmail,
   urlsOfUser,
-  generateRandomString,
+  generateRandomString
 } = require("./helper");
 const express = require("express");
 const request = require("request");
@@ -169,12 +169,17 @@ app.post("/urls/logout", (req, res) => {
 });
 
 app.get("/urls/:shortURL", (req, res) => {
-  let templateVars = {
-    shortURL: req.params.shortURL,
-    longURL: urlDatabase[req.params.shortURL].longURL,
-    user: users[req.session.id]
-  };
-  res.render("urls_show", templateVars);
+  const userId = req.session.id;
+  if (!userId) {
+    res.status(400).send("you have to log in with the owner id");
+  } else {
+    let templateVars = {
+      shortURL: req.params.shortURL,
+      longURL: urlDatabase[req.params.shortURL].longURL,
+      user: users[req.session.id]
+    };
+    res.render("urls_show", templateVars);
+  }
 });
 app.get("/u/:shortURL", (req, res) => {
   const url = urlDatabase[req.params.shortURL];
