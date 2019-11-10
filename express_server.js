@@ -1,10 +1,6 @@
 //external requirments
 const bcrypt = require("bcrypt");
-const {
-  urlsOfUser,
-  generateRandomString,
-  isEmailExist
-} = require("./helper");
+const { urlsOfUser, generateRandomString, isEmailExist } = require("./helper");
 const express = require("express");
 const request = require("request");
 const app = express();
@@ -96,21 +92,20 @@ app.post("/urls/:id/delete", (req, res) => {
 });
 //this code to update tiny url
 app.post("/urls/:id/update", (req, res) => {
-  const userId = req.session.id;
-  if (!userId) {
-    res.redirect("/login");
-  } else {
+  let shortURL = req.params.id;
+  let longURL = req.body.longURL;
+  // urlDatabase[shortURL] = { longURL: longURL, userID: req.session['id'] };
+  request(longURL, error => {
+    if (error) {
+      res.send(`NO such A Link check your URL`);
+      return;
+    }
     let shortURL = req.params.id;
-    const longURL = urlDatabase[shortURL].longURL;
-    request(urlDatabase[shortURL].longURL, error => {
-      if (error) {
-        res.send(`NO such A Link check your URL`);
-        return;
-      }
-      urlDatabase[shortURL] = { longURL: longURL, userID: req.session["id"] };
-      res.redirect(`/urls`);
-    });
-}});
+    let longURL = req.body.longURL;
+    urlDatabase[shortURL] = { longURL: longURL, userID: req.session["id"] };
+    res.redirect(`/urls`);
+  });
+});
 //url/new page code this code to creat new tiny url
 app.get("/urls/new", (req, res) => {
   const userId = req.session.id;
@@ -124,7 +119,7 @@ app.get("/urls/new", (req, res) => {
   }
 });
 // login code this code to log user to the app and contain encryption code to save password
-app.post('/login', (req, res) => {
+app.post("/login", (req, res) => {
   const { email, password } = req.body;
   let isPassworg = false;
   for (const userId in users) {
@@ -176,7 +171,7 @@ app.get("/u/:shortURL", (req, res) => {
     res.status(400).send("ther is no such tiny URL");
   }
 });
-// this code for registaration and to encrypt the password 
+// this code for registaration and to encrypt the password
 app.post("/register", (req, res) => {
   const id = generateRandomString();
   let email = req.body.email;
