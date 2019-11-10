@@ -23,7 +23,8 @@ TinyApp is a full stack web application built with Node and Express that allows 
 ## How to Run this Fancy app
 
 - Install all dependencies `npm install` .
-- Run the development web server using the `npm start`, notice you need to change the description test on the package,json file to `run express_server.js`.
+- Run the development web server using the `npm start`, notice you need to change the scripts->start on the package,json file to `./node_modules/.bin/nodemon -L express_server.js`.
+- run the express_server.js from terminal by running this code `nodemon express.server.js`
 - browse to http://localhost:8080/urls
  
 
