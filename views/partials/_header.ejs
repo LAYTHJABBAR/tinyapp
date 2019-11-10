@@ -1,8 +1,16 @@
+<!--Header Code-->
 <header>
   <nav class="navbar navbar-expand-md navbar-dark bg-success">
     <a class="navbar-brand" href="/urls">TinyApp</a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup"
-      aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+    <button
+      class="navbar-toggler"
+      type="button"
+      data-toggle="collapse"
+      data-target="#navbarNavAltMarkup"
+      aria-controls="navbarNavAltMarkup"
+      aria-expanded="false"
+      aria-label="Toggle navigation"
+    >
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
@@ -11,15 +19,23 @@
         <a class="nav-item nav-link" href="/urls/new">Create New URL</a>
       </div>
     </div>
+    <!--Showing the login and regis. buttons if the user is not logged-->
     <% if(!user){ %>
-      <div class="navbar-nav">
-      <a class="nav-item nav-link" href="/login" >Login</a>
-      <a class="nav-item nav-link" href="/register" >Register</a>
+    <div class="navbar-nav">
+      <a class="nav-item nav-link" href="/login">Login</a>
+      <a class="nav-item nav-link" href="/register">Register</a>
     </div>
-      <% } else { %>
-        <h6> you logged as : <%= user.email %> </h6>
+    <!--Showing the Header without loggin and reg. buttons when user is logged in-->
+    <% } else { %>
+    <h6>you logged as : <%= user.email %></h6>
     <form class="form-inline" action="/urls/logout" method="POST">
-      <button type="submit" class="btn btn-primary" style="justify-content: right;">Logout</button>
+      <button
+        type="submit"
+        class="btn btn-primary"
+        style="justify-content: right;"
+      >
+        Logout
+      </button>
     </form>
     <% } %>
   </nav>
