@@ -101,24 +101,16 @@ app.post("/urls/:id/update", (req, res) => {
     res.redirect("/login");
   } else {
     let shortURL = req.params.id;
-    const longURL = req.body.longURL;
-    if (longURL.startsWith("https://")) {
-      urlDatabase[shortURL] = { longURL: longURL, userID: req.session["id"] };
-    } else {
-      urlDatabase[shortURL] = {
-        longURL: `https://${longURL}`,
-        userID: req.session["id"]
-      };
-    }
+    const longURL = urlDatabase[shortURL].longURL;
     request(urlDatabase[shortURL].longURL, error => {
       if (error) {
         res.send(`NO such A Link check your URL`);
         return;
       }
+      urlDatabase[shortURL] = { longURL: longURL, userID: req.session["id"] };
       res.redirect(`/urls`);
     });
-  }
-});
+}});
 //url/new page code this code to creat new tiny url
 app.get("/urls/new", (req, res) => {
   const userId = req.session.id;
@@ -131,7 +123,8 @@ app.get("/urls/new", (req, res) => {
     res.render("urls_new", templateVars);
   }
 });
-// login code this code to log the use to the app and contain encryption code to save password
+// login code this code to log user to the app and contain encryption code to save password
+app.post('/login', (req, res) => {
   const { email, password } = req.body;
   let isPassworg = false;
   for (const userId in users) {
