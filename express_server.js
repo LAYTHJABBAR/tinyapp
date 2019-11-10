@@ -94,7 +94,6 @@ app.post("/urls/:id/delete", (req, res) => {
 app.post("/urls/:id/update", (req, res) => {
   let shortURL = req.params.id;
   let longURL = req.body.longURL;
-  // urlDatabase[shortURL] = { longURL: longURL, userID: req.session['id'] };
   request(longURL, error => {
     if (error) {
       res.send(`NO such A Link check your URL`);
