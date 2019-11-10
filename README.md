@@ -12,6 +12,7 @@ TinyApp is a full stack web application built with Node and Express that allows 
  !["Screenshot of Cookies page"](https://raw.githubusercontent.com/LAYTHJABBAR/tinyapp/master/docs/cookies.png)
 
 ## Dependencies
+please be sure to have them installed before running the app.
 
 - Node.js
 - Express
@@ -19,6 +20,10 @@ TinyApp is a full stack web application built with Node and Express that allows 
 - body-parser
 - bcrypt
 - cookie-session
+- request
+- ejs
+
+  
 
 ## How to Run this Fancy app
 
