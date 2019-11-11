@@ -150,7 +150,9 @@ app.post("/urls/logout", (req, res) => {
 });
 
 app.get("/urls/:shortURL", (req, res) => {
-  if (!urlDatabase[req.params.shortURL]) {
+  const userId = req.session.id;
+  let shortURL = urlDatabase[req.params.shortURL]
+  if ((shortURL.userID !== userId) || !userId) {
     res.status(400).send("you have to log in with the owner id");
   } else {
     let templateVars = {
